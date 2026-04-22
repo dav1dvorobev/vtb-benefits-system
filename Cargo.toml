@@ -1,4 +1,10 @@
 [workspace]
-members = ["crates/benefit-api", "crates/benefit-domain"]
+members = ["crates/*"]
 resolver = "3"
-default-members = []
+
+[workspace.package]
+version = "0.0.1"
+edition = "2024"
+
+[workspace.dependencies]
+statement-pdf = { path = "crates/statement-pdf" }
