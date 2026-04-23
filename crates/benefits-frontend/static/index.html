@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ВТБ Льготы и компенсации — Прототип</title>
+        <link rel="stylesheet" href="/app.css" />
+    </head>
+    <body>
+        <div id="phone-shell">
+
+            <section class="screen is-active" data-screen="home">
+                <div class="screen__scroll">
+                    <div class="vtb-main-header">
+                        <div class="main-topline">
+                            <div class="profile-badge">АК</div>
+                            <div class="main-brand">Личный кабинет сотрудника</div>
+                            <div class="header-space"></div>
+                        </div>
+
+                        <div class="account-balance">
+                            <div class="account-balance__label">Льготы и компенсации</div>
+                            <div class="account-balance__amount">284 560 ₽</div>
+                            <div class="account-balance__meta">
+                                Общий объем выплат и компенсаций сотрудника
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="main-stack">
+                        <article
+                            class="card benefit-entry-card"
+                            data-screen-target="benefits"
+                        >
+                            <div class="benefit-entry-card__shine" aria-hidden="true"></div>
+                            <div class="card-row card-row--top">
+                                <div>
+                                    <div class="card-title">Льготы и компенсации</div>
+                                    <div class="card-subtitle">Оформление заявлений и статусы</div>
+                                </div>
+                                <div class="card-link-text">Открыть</div>
+                            </div>
+
+                            <div class="badge-row">
+                                <span class="badge">5 доступных льгот</span>
+                                <span class="badge"
+                                    >2 активные компенсации</span
+                                >
+                                <span class="badge badge--warning">
+                                    1 заявка на согласовании
+                                </span>
+                            </div>
+
+                            <div class="entry-note">Доступные программы сотрудника</div>
+                        </article>
+
+                        <article class="card">
+                            <div class="section-title">Платежи и сервисы</div>
+                            <div class="service-grid">
+                                <div class="service-item">
+                                    <div class="service-chip" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M7 8h10" />
+                                            <path d="M13.5 5 17 8l-3.5 3" />
+                                            <path d="M17 16H7" />
+                                            <path d="M10.5 13 7 16l3.5 3" />
+                                        </svg>
+                                    </div>
+                                    <span>Переводы</span>
+                                </div>
+                                <div class="service-item">
+                                    <div class="service-chip" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24">
+                                            <rect x="4" y="6" width="16" height="12" rx="3" />
+                                            <path d="M4 10h16" />
+                                            <path d="M8 14h4" />
+                                        </svg>
+                                    </div>
+                                    <span>Платежи</span>
+                                </div>
+                                <div class="service-item">
+                                    <div class="service-chip" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M7 4.5h10" />
+                                            <path d="M7 9.5h10" />
+                                            <path d="M7 14.5h7" />
+                                            <rect x="4.5" y="3.5" width="15" height="17" rx="3" />
+                                        </svg>
+                                    </div>
+                                    <span>ЖКХ</span>
+                                </div>
+                                <div class="service-item">
+                                    <div class="service-chip" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="m8.5 12 2.2 2.2L15.8 9" />
+                                            <circle cx="12" cy="12" r="7.5" />
+                                        </svg>
+                                    </div>
+                                    <span>Штрафы</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <nav class="tab-bar">
+                    <button class="tab-item active">Главная</button>
+                    <button class="tab-item">Платежи</button>
+                    <button class="tab-item" data-screen-target="benefits">Льготы</button>
+                    <button class="tab-item">Профиль</button>
+                </nav>
+            </section>
+
+            <section class="screen" data-screen="benefits">
+                <div class="screen__scroll screen__scroll--with-tabbar">
+                    <div class="header">
+                        <button class="back-btn" data-screen-target="home">
+                            ←
+                        </button>
+                        <h1>Льготы</h1>
+                        <button class="header-link" data-screen-target="status">
+                            История
+                        </button>
+                    </div>
+
+                    <article class="card summary-card summary-card--soft">
+                        <div class="summary-head">
+                            <div>
+                                <div class="summary-card__label">Лимит сотрудника</div>
+                                <div class="summary-card__amount">85 000 ₽</div>
+                            </div>
+                            <div class="summary-note">2026</div>
+                        </div>
+                        <div class="summary-card__text">
+                            Доступно для оформления по корпоративным программам
+                        </div>
+                        <div class="summary-card__meta">
+                            Последнее обновление лимита: <strong>23 апреля</strong>
+                        </div>
+                    </article>
+
+                    <div class="section-label">Доступные программы</div>
+
+                    <article class="card benefit-list-card">
+                        <button
+                            class="benefit-item benefit-item--actionable"
+                            data-screen-target="detail"
+                            data-benefit-id="education"
+                        >
+                            <span class="benefit-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M4.5 9 12 5l7.5 4-7.5 4-7.5-4Z" />
+                                    <path d="M7.5 11.5V15c0 1.3 2 2.5 4.5 2.5s4.5-1.2 4.5-2.5v-3.5" />
+                                </svg>
+                            </span>
+                            <div class="benefit-copy">
+                                <div class="benefit-name">Обучение</div>
+                                <div class="benefit-meta">
+                                    До 35 000 ₽ в год, 100% стоимости курса
+                                </div>
+                            </div>
+                            <span class="status-text">Оформить</span>
+                        </button>
+
+                        <button
+                            class="benefit-item benefit-item--actionable"
+                            data-screen-target="detail"
+                            data-benefit-id="health"
+                        >
+                            <span class="benefit-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 19s-5.5-3.8-7-7.1C3.8 9.5 5 7 7.8 7c1.7 0 2.9.9 4.2 2.4C13.3 7.9 14.5 7 16.2 7 19 7 20.2 9.5 19 11.9 17.5 15.2 12 19 12 19Z" />
+                                </svg>
+                            </span>
+                            <div class="benefit-copy">
+                                <div class="benefit-name">ДМС</div>
+                                <div class="benefit-meta">
+                                    Подключение дополнительной программы страхования
+                                </div>
+                            </div>
+                            <span class="status-text">Оформить</span>
+                        </button>
+
+                        <button
+                            class="benefit-item benefit-item--actionable"
+                            data-screen-target="detail"
+                            data-benefit-id="transport"
+                        >
+                            <span class="benefit-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M5 8.5h11l3 3V17H5Z" />
+                                    <path d="M14 8.5V6.5H8v2" />
+                                    <circle cx="8.5" cy="17" r="1.5" />
+                                    <circle cx="16.5" cy="17" r="1.5" />
+                                </svg>
+                            </span>
+                            <div class="benefit-copy">
+                                <div class="benefit-name">Транспорт</div>
+                                <div class="benefit-meta">
+                                    Компенсация проезда до 5 000 ₽ в месяц
+                                </div>
+                            </div>
+                            <span class="status-text">Оформить</span>
+                        </button>
+
+                        <button
+                            class="benefit-item benefit-item--actionable"
+                            data-screen-target="detail"
+                            data-benefit-id="sport"
+                        >
+                            <span class="benefit-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M8 7.5c0-1.4 1.1-2.5 2.5-2.5h3C14.9 5 16 6.1 16 7.5c0 2-1.5 3.5-4 3.5s-4-1.5-4-3.5Z" />
+                                    <path d="M9 12.5 7 19" />
+                                    <path d="M15 12.5 17 19" />
+                                    <path d="M10.5 15.5h3" />
+                                </svg>
+                            </span>
+                            <div class="benefit-copy">
+                                <div class="benefit-name">Спорт</div>
+                                <div class="benefit-meta">
+                                    Компенсация абонемента до 3 000 ₽ в месяц
+                                </div>
+                            </div>
+                            <span class="status-text">Оформить</span>
+                        </button>
+
+                        <button
+                            class="benefit-item benefit-item--actionable benefit-item--last"
+                            data-screen-target="detail"
+                            data-benefit-id="mobile"
+                        >
+                            <span class="benefit-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <rect x="7.5" y="4.5" width="9" height="15" rx="2" />
+                                    <path d="M10.5 7h3" />
+                                    <circle cx="12" cy="16.5" r=".7" fill="currentColor" stroke="none" />
+                                </svg>
+                            </span>
+                            <div class="benefit-copy">
+                                <div class="benefit-name">Связь</div>
+                                <div class="benefit-meta">
+                                    Корпоративная мобильная связь и рабочий номер
+                                </div>
+                            </div>
+                            <span class="status-text">Оформить</span>
+                        </button>
+                    </article>
+                </div>
+
+                <nav class="tab-bar">
+                    <button class="tab-item" data-screen-target="home">Главная</button>
+                    <button class="tab-item active">Льготы</button>
+                    <button class="tab-item" data-screen-target="status">Заявки</button>
+                    <button class="tab-item">Еще</button>
+                </nav>
+            </section>
+
+            <section class="screen" data-screen="detail">
+                <div class="screen__scroll">
+                    <div class="header">
+                        <button class="back-btn" data-screen-target="benefits">
+                            ←
+                        </button>
+                        <h1 data-detail-name>Обучение</h1>
+                        <div class="header-space"></div>
+                    </div>
+
+                    <article class="card detail-hero">
+                        <div class="detail-hero__eyebrow" data-detail-category>
+                            Льгота
+                        </div>
+                        <h2 data-detail-title>Компенсация обучения</h2>
+                        <p data-detail-description>
+                            Профессиональное развитие, внешние курсы и программы
+                            повышения квалификации.
+                        </p>
+
+                        <div class="detail-list">
+                            <div class="detail-row">
+                                <span>Лимит компенсации</span>
+                                <strong data-detail-limit>35 000 ₽ в год</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Что покрывается</span>
+                                <strong data-detail-coverage>100% стоимости</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Период действия</span>
+                                <strong data-detail-period>01.01.2026 — 31.12.2026</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Кто согласует</span>
+                                <strong data-detail-approver>Руководитель и HR</strong>
+                            </div>
+                            <div class="detail-row detail-row--last">
+                                <span>Срок рассмотрения</span>
+                                <strong data-detail-review-time>До 5 рабочих дней</strong>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <div class="section-title">Нужные документы</div>
+                        <ul class="plain-list" data-detail-documents>
+                            <li>Договор или счет на обучение</li>
+                            <li>Чек или подтверждение оплаты</li>
+                            <li>Программа курса или описание</li>
+                        </ul>
+                    </article>
+
+                    <article class="card">
+                        <div class="section-title">FAQ и условия</div>
+                        <div class="faq-item" data-detail-faq-primary>
+                            Компенсация перечисляется на счет ВТБ после
+                            одобрения работодателем.
+                        </div>
+                        <div class="faq-item faq-item--last" data-detail-faq-secondary>
+                            Повторная заявка возможна, если не исчерпан годовой
+                            лимит.
+                        </div>
+                    </article>
+
+                    <div class="button-stack">
+                        <button class="btn" data-screen-target="apply">Оформить</button>
+                        <button class="btn btn-secondary">
+                            Подробнее об условиях
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="screen" data-screen="apply">
+                <div class="screen__scroll">
+                    <div class="header">
+                        <button class="back-btn" data-screen-target="detail">
+                            ←
+                        </button>
+                        <h1>Новая заявка</h1>
+                        <div class="header-space"></div>
+                    </div>
+
+                    <div class="section-label" data-apply-benefit-title>
+                        Компенсация обучения
+                    </div>
+
+                    <div class="stepper">
+                        <button
+                            class="stepper__item is-active"
+                            data-step-target="1"
+                        >
+                            <span>1</span>
+                            <small>Данные</small>
+                        </button>
+                        <button class="stepper__item" data-step-target="2">
+                            <span>2</span>
+                            <small>Документы</small>
+                        </button>
+                        <button class="stepper__item" data-step-target="3">
+                            <span>3</span>
+                            <small>Готово</small>
+                        </button>
+                    </div>
+
+                    <div class="form-step is-active" data-step="1">
+                        <article class="card form-card">
+                            <div class="form-group">
+                                <label>Номер заявления</label>
+                                <input
+                                    type="text"
+                                    value="WEB-1760309"
+                                    data-statement-field="statementNumber"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Должность адресата</label>
+                                <input
+                                    type="text"
+                                    value="Генеральному директору"
+                                    data-statement-field="recipientPosition"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Компания</label>
+                                <input
+                                    type="text"
+                                    value="ООО &quot;Рога и Копыта&quot;"
+                                    data-statement-field="recipientCompany"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>ФИО адресата</label>
+                                <input
+                                    type="text"
+                                    value="Кабанову К. К."
+                                    data-statement-field="recipientName"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>ФИО заявителя</label>
+                                <input
+                                    type="text"
+                                    value="Иванов Иван Иванович"
+                                    data-statement-field="applicantName"
+                                />
+                            </div>
+                            <div class="form-group form-group--last">
+                                <label>Подразделение</label>
+                                <input
+                                    type="text"
+                                    value="Отдел разработки программного обеспечения"
+                                    data-statement-field="applicantDepartment"
+                                />
+                            </div>
+                        </article>
+
+                        <button class="btn" data-step-target="2">
+                            Продолжить
+                        </button>
+                    </div>
+
+                    <div class="form-step" data-step="2">
+                        <article class="card form-card">
+                            <div class="form-group">
+                                <label>Дата заявления</label>
+                                <input
+                                    type="date"
+                                    value="2026-04-20"
+                                    data-statement-field="date"
+                                />
+                            </div>
+                            <div class="form-group form-group--last">
+                                <label>Текст заявления</label>
+                                <textarea rows="6" data-statement-field="body">
+Прошу предоставить мне дополнительное медицинское страхование по программе ДМС Стандарт с 01.05.2026.</textarea
+                                >
+                            </div>
+                        </article>
+
+                        <div class="button-row">
+                            <button
+                                class="btn btn-secondary"
+                                data-step-target="1"
+                            >
+                                Назад
+                            </button>
+                            <button class="btn" data-step-target="3">
+                                Проверить
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="3">
+                        <article class="card confirmation-card">
+                            <div class="section-title">
+                                JSON для отправки
+                            </div>
+                            <pre class="json-preview" data-json-preview></pre>
+                        </article>
+
+                        <div class="button-row">
+                            <button
+                                class="btn btn-secondary"
+                                data-step-target="2"
+                            >
+                                Назад
+                            </button>
+                            <button class="btn" data-submit-application="true">
+                                Сформировать заявление
+                            </button>
+                        </div>
+                        <div class="submit-status" role="status" aria-live="polite"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="screen" data-screen="status">
+                <div class="screen__scroll">
+                    <div class="header">
+                        <button class="back-btn" data-screen-target="benefits">
+                            ←
+                        </button>
+                        <h1>Статусы</h1>
+                        <div class="header-space"></div>
+                    </div>
+
+                    <article class="card timeline-card">
+                        <div class="card-row">
+                            <div>
+                                <div class="section-title">Активная заявка</div>
+                                <div class="card-subtitle" data-status-title>
+                                    Заявок пока нет
+                                </div>
+                            </div>
+                            <span class="mini-pill" data-status-pill>Нет данных</span>
+                        </div>
+
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-title">
+                                    Заявка отправлена
+                                </div>
+                                <div class="timeline-text" data-status-submitted-at>
+                                    Нет отправленных заявок
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-title">
+                                    Проверка работодателем
+                                </div>
+                                <div class="timeline-text" data-status-review>
+                                    После отправки заявка появится здесь
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-title">Одобрено</div>
+                                <div class="timeline-text" data-status-approval>
+                                    Статус будет обновлен после проверки
+                                </div>
+                            </div>
+                            <div class="timeline-item inactive">
+                                <div class="timeline-title">
+                                    Компенсация зачислена
+                                </div>
+                                <div class="timeline-text" data-status-payout>
+                                    Ожидает решения работодателя
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <div class="section-label">История заявок</div>
+
+                    <article class="card history-list">
+                        <div class="history-card benefit-item">
+                            <div class="benefit-copy">
+                                <div class="benefit-name">Транспорт</div>
+                                <div class="benefit-meta">12 апреля 2026</div>
+                            </div>
+                            <div class="history-meta">
+                                <div class="history-amount">2 450 ₽</div>
+                                <div class="status-pill status-pill--paid">
+                                    Выплачено
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="history-card benefit-item" data-last-request>
+                            <div class="benefit-copy">
+                                <div class="benefit-name" data-last-request-title>
+                                    Компенсация обучения
+                                </div>
+                                <div class="benefit-meta" data-last-request-date>19 апреля 2026</div>
+                            </div>
+                            <div class="history-meta">
+                                <div class="history-amount" data-last-request-number>№ WEB-1760309</div>
+                                <div class="status-pill status-pill--pending" data-last-request-status>
+                                    На согласовании
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="history-card benefit-item">
+                            <div class="benefit-copy">
+                                <div class="benefit-name">Спорт</div>
+                                <div class="benefit-meta">15 марта 2026</div>
+                            </div>
+                            <div class="history-meta">
+                                <div class="history-amount">2 500 ₽</div>
+                                <div
+                                    class="status-pill status-pill--pending-soft"
+                                >
+                                    Нужны уточнения
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="history-card benefit-item benefit-item--last history-card--faded"
+                        >
+                            <div class="benefit-copy">
+                                <div class="benefit-name">Связь</div>
+                                <div class="benefit-meta">28 февраля 2026</div>
+                            </div>
+                            <div class="history-meta">
+                                <div class="history-amount">1 200 ₽</div>
+                                <div class="status-pill status-pill--rejected">
+                                    Отклонено
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </div>
+
+        <script type="module" src="/app.js"></script>
+    </body>
+</html>

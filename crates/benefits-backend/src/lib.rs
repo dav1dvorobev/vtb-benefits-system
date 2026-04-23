@@ -4,6 +4,7 @@ pub mod routes;
 use axum::Router;
 use chrono::{DateTime, Utc};
 use tokio::net::TcpListener;
+use tower_http::cors::{Any, CorsLayer};
 
 #[derive(Clone, Debug)]
 pub struct AppState {
@@ -25,7 +26,15 @@ impl Default for AppState {
 }
 
 pub async fn run(listener: TcpListener, state: AppState) -> std::io::Result<()> {
-    let app = Router::new().merge(routes::router()).with_state(state);
+    let app = Router::new()
+        .merge(routes::routes())
+        .with_state(state)
+        .layer(
+            CorsLayer::new()
+                .allow_origin(Any)
+                .allow_methods(Any)
+                .allow_headers(Any),
+        );
 
     axum::serve(listener, app).await
 }

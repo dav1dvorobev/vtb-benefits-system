@@ -1,0 +1,20 @@
+[package]
+name = "benefits-backend"
+version = "0.0.1"
+edition.workspace = true
+
+[dependencies]
+axum = "0.8"
+chrono = { version = "0.4", features = ["serde"] }
+dotenv = "0.15"
+serde_json = "1"
+statement-pdf.workspace = true
+tokio = { version = "1.52.1", features = [
+    "macros",
+    "net",
+    "rt",
+    "rt-multi-thread",
+] }
+tower-http = { version = "0.6.8", features = ["cors"] }
+tracing.workspace = true
+tracing-subscriber.workspace = true
