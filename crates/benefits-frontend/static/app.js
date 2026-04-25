@@ -1,6 +1,8 @@
 import { benefits, defaultBenefitId } from "./benefits-data.js";
 
-const API_BASE_URL = window.BENEFITS_API_URL ?? "http://127.0.0.1:3001";
+const API_BASE_URL =
+    window.BENEFITS_API_URL ??
+    (window.location.port === "7878" ? "http://127.0.0.1:3001" : "");
 const STORAGE_PREFIX = "benefits-web";
 const screens = [...document.querySelectorAll("[data-screen]")];
 const stepItems = [...document.querySelectorAll(".stepper__item")];
