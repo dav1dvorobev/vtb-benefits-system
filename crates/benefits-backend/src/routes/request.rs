@@ -7,86 +7,58 @@ use crate::AppState;
 use axum::{
     Json,
     extract::{Path as AxumPath, State},
-    http::{HeaderMap, HeaderValue, StatusCode, header},
+    http::{
+        HeaderMap, HeaderValue, StatusCode,
+        header::{self, InvalidHeaderValue},
+    },
     response::{IntoResponse, Response},
 };
 use chrono::Utc;
 use statement_pdf::{StatementAssets, StatementInput};
 
 const TMP_DIR: &str = "tmp";
+const STAMP_PATH: &str = "stamp.png";
+const ROUTE_TARGET: &str = "benefits_backend::routes::request";
 
 pub async fn request(
     State(_state): State<AppState>,
     Json(statement): Json<StatementInput>,
 ) -> Response {
-    tracing::info!(
-        target: "benefits_api::routes::request",
-        ?statement,
-        "request received"
-    );
+    tracing::info!(target: ROUTE_TARGET, ?statement, "request received");
 
-    let stamp_png = match fs::read(Path::new("stamp.png")) {
+    let stamp_png = match read_stamp() {
         Ok(stamp_png) => stamp_png,
         Err(error) => {
             tracing::error!(%error, "failed to read stamp.png");
-            return (
+            return json_error(
                 StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({
-                    "error": "stamp.png is missing or unreadable"
-                })),
-            )
-                .into_response();
+                "stamp.png is missing or unreadable",
+            );
         }
     };
 
-    let pdf = match statement_pdf::generate_pdf_with_assets(
-        statement.clone(),
-        StatementAssets {
-            stamp_png: Some(stamp_png),
-            signature_images: Default::default(),
-        },
-    ) {
+    let pdf = match render_pdf(statement.clone(), stamp_png) {
         Ok(pdf) => pdf,
         Err(error) => {
             tracing::error!(%error, "failed to generate statement PDF");
-            return (
-                StatusCode::BAD_REQUEST,
-                Json(serde_json::json!({
-                    "error": error.to_string()
-                })),
-            )
-                .into_response();
+            return json_error(StatusCode::BAD_REQUEST, error.to_string());
         }
     };
 
     let file_name = build_file_name(&statement.statement_number);
-    let tmp_dir = Path::new(TMP_DIR);
-
-    if let Err(error) = fs::create_dir_all(tmp_dir) {
-        tracing::error!(%error, dir = %tmp_dir.display(), "failed to create tmp directory");
-        return (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({
-                "error": "failed to create tmp directory"
-            })),
-        )
-            .into_response();
-    }
-
-    let file_path = tmp_dir.join(&file_name);
-    if let Err(error) = fs::write(&file_path, pdf) {
-        tracing::error!(%error, path = %file_path.display(), "failed to write generated PDF");
-        return (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({
-                "error": "failed to persist generated PDF"
-            })),
-        )
-            .into_response();
-    }
+    let file_path = match save_pdf(&file_name, pdf) {
+        Ok(path) => path,
+        Err(error) => {
+            tracing::error!(%error, file_name, "failed to persist generated PDF");
+            return json_error(
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "failed to persist generated PDF",
+            );
+        }
+    };
 
     tracing::info!(
-        target: "benefits_api::routes::request",
+        target: ROUTE_TARGET,
         statement_number = %statement.statement_number,
         path = %file_path.display(),
         "statement PDF saved"
@@ -108,53 +80,84 @@ pub async fn download(
     AxumPath(file_name): AxumPath<String>,
 ) -> Response {
     let Some(file_path) = resolve_download_path(&file_name) else {
-        return (
-            StatusCode::BAD_REQUEST,
-            Json(serde_json::json!({
-                "error": "invalid file name"
-            })),
-        )
-            .into_response();
+        return json_error(StatusCode::BAD_REQUEST, "invalid file name");
     };
 
     match fs::read(&file_path) {
         Ok(pdf) => {
-            let mut headers = HeaderMap::new();
-            headers.insert(header::CONTENT_TYPE, HeaderValue::from_static("application/pdf"));
-
-            let content_disposition = format!("attachment; filename=\"{file_name}\"");
-            let Ok(content_disposition) = HeaderValue::from_str(&content_disposition) else {
-                return (
+            let Ok(headers) = download_headers(&file_name) else {
+                return json_error(
                     StatusCode::INTERNAL_SERVER_ERROR,
-                    Json(serde_json::json!({
-                        "error": "failed to build download headers"
-                    })),
-                )
-                    .into_response();
+                    "failed to build download headers",
+                );
             };
-
-            headers.insert(header::CONTENT_DISPOSITION, content_disposition);
 
             (StatusCode::OK, headers, pdf).into_response()
         }
-        Err(error) if error.kind() == std::io::ErrorKind::NotFound => (
-            StatusCode::NOT_FOUND,
-            Json(serde_json::json!({
-                "error": "file not found"
-            })),
-        )
-            .into_response(),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
+            json_error(StatusCode::NOT_FOUND, "file not found")
+        }
         Err(error) => {
             tracing::error!(%error, path = %file_path.display(), "failed to read generated PDF");
-            (
+            json_error(
                 StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({
-                    "error": "failed to read generated PDF"
-                })),
+                "failed to read generated PDF",
             )
-                .into_response()
         }
     }
+}
+
+fn read_stamp() -> std::io::Result<Vec<u8>> {
+    fs::read(Path::new(STAMP_PATH))
+}
+
+fn render_pdf(
+    statement: StatementInput,
+    stamp_png: Vec<u8>,
+) -> Result<Vec<u8>, statement_pdf::StatementPdfError> {
+    statement_pdf::generate_pdf_with_assets(
+        statement,
+        StatementAssets {
+            stamp_png: Some(stamp_png),
+            signature_images: Default::default(),
+        },
+    )
+}
+
+fn save_pdf(file_name: &str, pdf: Vec<u8>) -> std::io::Result<PathBuf> {
+    let tmp_dir = Path::new(TMP_DIR);
+    fs::create_dir_all(tmp_dir)?;
+
+    let file_path = tmp_dir.join(file_name);
+    fs::write(&file_path, pdf)?;
+
+    Ok(file_path)
+}
+
+fn download_headers(file_name: &str) -> Result<HeaderMap, InvalidHeaderValue> {
+    let mut headers = HeaderMap::new();
+    let content_disposition = format!("attachment; filename=\"{file_name}\"");
+
+    headers.insert(
+        header::CONTENT_TYPE,
+        HeaderValue::from_static("application/pdf"),
+    );
+    headers.insert(
+        header::CONTENT_DISPOSITION,
+        HeaderValue::from_str(&content_disposition)?,
+    );
+
+    Ok(headers)
+}
+
+fn json_error(status: StatusCode, message: impl Into<String>) -> Response {
+    (
+        status,
+        Json(serde_json::json!({
+            "error": message.into()
+        })),
+    )
+        .into_response()
 }
 
 fn build_file_name(statement_number: &str) -> String {

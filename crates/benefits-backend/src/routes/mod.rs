@@ -9,5 +9,8 @@ pub fn routes() -> Router<AppState> {
     Router::new()
         .route("/api/health", get(health::health))
         .route("/api/v1/request", post(request::request))
-        .route("/api/v1/request/download/{file_name}", get(request::download))
+        .route(
+            "/api/v1/request/download/{file_name}",
+            get(request::download),
+        )
 }
