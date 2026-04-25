@@ -1,0 +1,31 @@
+services:
+  benefits-backend:
+    build:
+      context: .
+      dockerfile: deploy/backend.Dockerfile
+    environment:
+      BENEFITS_APPLICATION_PORT: 3001
+      RUST_LOG: info,benefits_backend=info,benefits_backend::routes::request=info
+    restart: unless-stopped
+    volumes:
+      - ./tmp:/app/tmp
+
+  benefits-frontend:
+    build:
+      context: .
+      dockerfile: deploy/frontend.Dockerfile
+    depends_on:
+      - benefits-backend
+    environment:
+      BENEFITS_FRONTEND_HOST: ${BENEFITS_FRONTEND_HOST:-localhost}
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

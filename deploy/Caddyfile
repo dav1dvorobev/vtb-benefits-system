@@ -1,0 +1,8 @@
+{$BENEFITS_FRONTEND_HOST} {
+    root * /srv
+    encode zstd gzip
+    file_server
+    handle /api/* {
+        reverse_proxy benefits-backend:3001
+    }
+}
