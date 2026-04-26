@@ -101,6 +101,10 @@ function saveSubmittedRequest() {
     );
 }
 
+function apiUrl(path) {
+    return new URL(path, API_BASE_URL || window.location.origin).toString();
+}
+
 function currentBenefit() {
     return benefits[activeBenefitId] ?? benefits[defaultBenefitId];
 }
@@ -184,9 +188,8 @@ function triggerPendingDownload() {
         return;
     }
 
-    const url = new URL(submittedRequest.downloadUrl, API_BASE_URL);
     const link = document.createElement("a");
-    link.href = url.toString();
+    link.href = apiUrl(submittedRequest.downloadUrl);
     link.download = submittedRequest.fileName ?? "statement.pdf";
     link.click();
 
@@ -403,7 +406,7 @@ async function submitApplication(button) {
     setSubmitStatus("Формируем заявление...", "neutral");
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/request`, {
+        const response = await fetch(apiUrl("/api/v1/request"), {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify(payload),
